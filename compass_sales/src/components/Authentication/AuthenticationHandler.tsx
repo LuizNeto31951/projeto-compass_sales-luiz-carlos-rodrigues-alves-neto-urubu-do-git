@@ -2,13 +2,14 @@ import React from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
 
 import AuthenticationForm from './AuthenticationForm';
-import RedButton from '../UI/RedButton';
-import {Title} from '../UI/Title';
+import RedButton from '../ui/RedButton';
+import {Title} from '../ui/Title';
+import {useNavigation} from '@react-navigation/native';
 
 interface AuthenticationHandlerProps {
   isLogging?: boolean;
   forgotPass?: boolean;
-  Authenticate?: (credentials: {
+  Authenticate: (credentials: {
     name: string;
     email: string;
     password: string;
@@ -32,7 +33,15 @@ function AuthenticationHandler({
     password: false,
   });
 
-  const switchAuthModeHandler = () => {};
+  const navigation = useNavigation();
+
+  const switchAuthModeHandler = () => {
+    if (isLogging) {
+      navigation.navigate('SignUpScreen' as never);
+    } else {
+      navigation.navigate('LoginScreen' as never);
+    }
+  };
 
   const sendHandler = () => {};
 
@@ -48,17 +57,16 @@ function AuthenticationHandler({
     password = password.trim();
 
     let nameIsValid = false;
-    if(!isLogging){
+    if (!isLogging) {
       nameIsValid = name.length > 0;
-    }
-    else{
+    } else {
       nameIsValid = true;
     }
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const emailIsValid = emailPattern.test(email);
     const passwordIsValid = password.length > 6;
 
-    if (!isLogging || !nameIsValid || !emailIsValid || !passwordIsValid) {
+    if (!nameIsValid || !emailIsValid || !passwordIsValid) {
       Alert.alert('Invalid input', 'Try again.');
       setIsValid({
         name: !nameIsValid,
@@ -67,7 +75,7 @@ function AuthenticationHandler({
       });
       return;
     }
-    Authenticate!({name, email, password});
+    Authenticate({name, email, password});
   };
 
   return (
@@ -83,9 +91,11 @@ function AuthenticationHandler({
       />
       <View style={styles.buttons}>
         {!forgotPass ? (
-          <RedButton onPress={switchAuthModeHandler}>
-            {isLogging ? 'Create a new user' : 'Log in instead'}
-          </RedButton>
+          isLogging && (
+            <RedButton onPress={switchAuthModeHandler}>
+              Create a new user
+            </RedButton>
+          )
         ) : (
           <RedButton onPress={sendHandler}>Send</RedButton>
         )}
