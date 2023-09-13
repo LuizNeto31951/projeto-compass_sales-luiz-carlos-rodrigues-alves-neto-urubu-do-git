@@ -43,8 +43,6 @@ function AuthenticationHandler({
     }
   };
 
-  const sendHandler = () => {};
-
   const submitHandler = (credentials: {
     name: string;
     email: string;
@@ -65,6 +63,18 @@ function AuthenticationHandler({
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const emailIsValid = emailPattern.test(email);
     const passwordIsValid = password.length > 6;
+
+    if(forgotPass){
+      setIsValid({
+        name: true,
+        email: !emailIsValid,
+        password: true,
+      });
+      if(isValid){
+        Authenticate({name, email, password});
+      }
+      return;
+    }
 
     if (!nameIsValid || !emailIsValid || !passwordIsValid) {
       Alert.alert('Invalid input', 'Try again.');
@@ -90,14 +100,8 @@ function AuthenticationHandler({
         inputInvalid={isValid}
       />
       <View style={styles.buttons}>
-        {!forgotPass ? (
-          isLogging && (
-            <RedButton onPress={switchAuthModeHandler}>
-              Create a new user
-            </RedButton>
-          )
-        ) : (
-          <RedButton onPress={sendHandler}>Send</RedButton>
+        {isLogging && (
+        <RedButton onPress={switchAuthModeHandler}>Create a new user</RedButton>
         )}
       </View>
     </View>

@@ -3,6 +3,7 @@ import AuthenticationHandler from '../components/authentication/AuthenticationHa
 import {View, Alert} from 'react-native';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
 import {login} from '../components/util/firebase';
+import {AuthContext} from '../context/authContext';
 
 function LoginScreen(): JSX.Element {
   interface loginProps {
@@ -11,11 +12,13 @@ function LoginScreen(): JSX.Element {
   }
 
   const [loading, setLoading] = React.useState(false);
+  const ctx = React.useContext(AuthContext);
 
   async function loginHandler({email, password}: loginProps) {
     setLoading(true);
     try {
-      await login(email, password);
+      const data = await login(email, password);
+      ctx.authLogin(data.token, data.id);
     } catch (error) {
       Alert.alert(
         'Failed to login',

@@ -134,10 +134,12 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
               </TextButton>
             )
           ) : null}
-          {!forgotPass && (
+          {!forgotPass ? (
             <RedButton onPress={submitHandler}>
               {isLogging ? 'Log In' : 'Sign Up'}
             </RedButton>
+          ) : (
+            <RedButton onPress={submitHandler}>Send</RedButton>
           )}
         </View>
       </View>
