@@ -57,7 +57,7 @@ function AuthenticationHandler({
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <Title>
         {forgotPass ? 'Forgot Password' : isLogging ? 'Login' : 'Sign in'}
       </Title>
@@ -82,6 +82,7 @@ function AuthenticationHandler({
 }
 
 const styles = StyleSheet.create({
+  container: {backgroundColor: 'white'},
   buttons: {
     marginTop: 8,
     marginHorizontal: 16,

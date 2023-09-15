@@ -16,8 +16,8 @@ export const Title: React.FC<TitleProps> = props => {
 const styles = StyleSheet.create({
   container: {
     marginLeft: 14,
-    marginBottom: 62,
-    marginTop: 26,
+    marginBottom: 30,
+    marginTop: 13,
   },
   title: {
     fontSize: 34,

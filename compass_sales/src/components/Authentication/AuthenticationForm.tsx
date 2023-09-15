@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   buttons: {
-    marginTop: 16,
+    marginTop: 2,
   },
   text: {
     fontSize: 15,
