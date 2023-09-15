@@ -1,7 +1,7 @@
 import React from 'react';
 import AuthenticationHandler from '../components/authentication/AuthenticationHandler';
 import {View, Alert} from 'react-native';
-import {signUp} from '../components/util/firebase';
+import {signUp} from '../components/util/Firebase';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
 import {AuthContext} from '../context/authContext';
 

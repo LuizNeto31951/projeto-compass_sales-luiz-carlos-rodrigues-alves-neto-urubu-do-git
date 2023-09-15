@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Alert} from 'react-native';
 import AuthenticationHandler from '../components/authentication/AuthenticationHandler';
-import { resetPassword } from '../components/util/firebase';
+import { resetPassword } from '../components/util/Firebase';
 
 function ForgotPassword(): JSX.Element {
   interface forgotProps {

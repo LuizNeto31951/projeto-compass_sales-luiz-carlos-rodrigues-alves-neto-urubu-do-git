@@ -2,7 +2,7 @@ import React from 'react';
 import AuthenticationHandler from '../components/authentication/AuthenticationHandler';
 import {View, Alert} from 'react-native';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
-import {login} from '../components/util/firebase';
+import {login} from '../components/util/Firebase';
 import {AuthContext} from '../context/authContext';
 
 function LoginScreen(): JSX.Element {

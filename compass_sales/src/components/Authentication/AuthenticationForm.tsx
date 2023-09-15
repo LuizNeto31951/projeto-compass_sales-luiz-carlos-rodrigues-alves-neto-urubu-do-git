@@ -5,6 +5,8 @@ import RedButton from '../ui/RedButton';
 import Input from './Input';
 import TextButton from '../ui/TextButton';
 import {useNavigation} from '@react-navigation/native';
+import {AuthContext} from '../../context/authContext';
+import {Colors} from '../../constants/styles';
 
 interface AuthenticationFormProps {
   isLogging: boolean;
@@ -14,29 +16,31 @@ interface AuthenticationFormProps {
     email: string;
     password: string;
   }) => void;
-  inputInvalid: {
-    name: boolean;
-    email: boolean;
-    password: boolean;
-  };
 }
 
 const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
   isLogging,
   forgotPass,
   onSubmit,
-  inputInvalid,
 }) => {
-  const [showImage, setShowImage] = React.useState(false);
+  interface isValid {
+    name: boolean;
+    email: boolean;
+    password: boolean;
+  }
+
+  const [isValid, setIsValid] = React.useState<isValid>({
+    name: false,
+    email: false,
+    password: false,
+  });
+
+  const [showAfter, setShowAfter] = React.useState(false);
   const [enteredName, setEnteredName] = React.useState<string>('');
   const [enteredEmail, setEnteredEmail] = React.useState<string>('');
   const [enteredPassword, setEnteredPassword] = React.useState<string>('');
 
-  const {
-    name: nameIsInvald,
-    email: emailIsInvalid,
-    password: passwordIsInvalid,
-  } = inputInvalid;
+  const ctx = React.useContext(AuthContext);
 
   const navigation = useNavigation();
 
@@ -52,6 +56,37 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
         setEnteredPassword(enteredValue);
         break;
     }
+
+    let name = enteredName.trim();
+    let email = enteredEmail.trim();
+    let password = enteredPassword.trim();
+
+    let nameIsValid = false;
+    if (!isLogging) {
+      nameIsValid = name.length > 0;
+    } else {
+      nameIsValid = true;
+    }
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailIsValid = emailPattern.test(email);
+    const passwordIsValid = password.length > 6;
+
+    if (forgotPass) {
+      setIsValid({
+        name: true,
+        email: emailIsValid,
+        password: true,
+      });
+    } else {
+      setIsValid({
+        name: nameIsValid,
+        email: emailIsValid,
+        password: passwordIsValid,
+      });
+    }
+    if (nameIsValid && emailIsValid && passwordIsValid) {
+      ctx.isValid;
+    }
   };
 
   const submitHandler = () => {
@@ -60,17 +95,17 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
       email: enteredEmail,
       password: enteredPassword,
     });
-    setShowImage(true);
+    setShowAfter(true);
   };
 
   const forgotHandler = () => {
-    setShowImage(false);
+    setShowAfter(false);
     navigation.navigate('ForgotPassword' as never);
   };
 
   const backHandler = () => {
-    setShowImage(false);
-    navigation.goBack();
+    setShowAfter(false);
+    navigation.navigate('LoginScreen' as never);
   };
 
   return (
@@ -84,9 +119,12 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
             }
             value={enteredName}
             keyboardType="default"
-            isInvalid={nameIsInvald}
-            showImage={showImage}
+            showAfter={showAfter}
             isPassword={false}
+            isValid={isValid.name}
+            message="Name should not be empty"
+            labelStyle={isValid.name ? undefined : styles.labelInvalid}
+            viewStyle={isValid.name ? undefined : styles.containerInvalid}
           />
         )}
         <Input
@@ -96,9 +134,12 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
           }
           value={enteredEmail}
           keyboardType="email-address"
-          isInvalid={emailIsInvalid}
-          showImage={showImage}
+          showAfter={showAfter}
           isPassword={false}
+          isValid={isValid.email}
+          message="Email must be valid. Example : example@example.com"
+          labelStyle={isValid.email ? undefined : styles.labelInvalid}
+          viewStyle={isValid.email ? undefined : styles.containerInvalid}
         />
         {!forgotPass && (
           <Input
@@ -108,9 +149,12 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
             }
             value={enteredPassword}
             keyboardType="default"
-            isInvalid={passwordIsInvalid}
-            showImage={showImage}
+            showAfter={showAfter}
             isPassword={true}
+            isValid={isValid.password}
+            message="Password must have at least 6 characters"
+            labelStyle={isValid.password ? undefined : styles.labelInvalid}
+            viewStyle={isValid.password ? undefined : styles.containerInvalid}
           />
         )}
 
@@ -164,5 +208,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
     alignItems: 'center',
     marginBottom: 32,
+  },
+  labelInvalid: {
+    color: Colors.errorLabel,
+  },
+  containerInvalid: {
+    borderWidth: 1,
+    borderColor: Colors.errorInput,
   },
 });
