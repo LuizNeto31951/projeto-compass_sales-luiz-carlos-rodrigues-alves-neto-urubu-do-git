@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     padding: 32,
   },
   message: {
+    color: 'black',
     fontSize: 16,
     marginBottom: 12,
   },

@@ -22,7 +22,7 @@ const Input: React.FC<InputProps> = props => {
       </Text>
       <View style={styles.inverse}>
         <TextInput
-          caretHidden={true}
+          autoCapitalize="none"
           style={styles.input}
           keyboardType={props.keyboardType}
           onChangeText={props.onUpdateValue}
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     color: 'black',
-    paddingVertical: 8,
+    paddingVertical: 4,
     paddingHorizontal: 6,
     borderRadius: 4,
     fontSize: 16,

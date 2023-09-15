@@ -1,9 +1,10 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import RedButton from '../UI/RedButton';
+import RedButton from '../ui/RedButton';
 import Input from './Input';
-import TextButton from '../UI/TextButton';
+import TextButton from '../ui/TextButton';
+import {useNavigation} from '@react-navigation/native';
 
 interface AuthenticationFormProps {
   isLogging: boolean;
@@ -37,6 +38,8 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
     password: passwordIsInvalid,
   } = inputInvalid;
 
+  const navigation = useNavigation();
+
   const updateInputValueHandler = (inputType: string, enteredValue: string) => {
     switch (inputType) {
       case 'name':
@@ -60,9 +63,15 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
     setShowImage(true);
   };
 
-  const forgotHandler = () => {};
+  const forgotHandler = () => {
+    setShowImage(false);
+    navigation.navigate('ForgotPassword' as never);
+  };
 
-  const backHandler = () => {};
+  const backHandler = () => {
+    setShowImage(false);
+    navigation.goBack();
+  };
 
   return (
     <View style={styles.form}>
@@ -125,10 +134,12 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
               </TextButton>
             )
           ) : null}
-          {!forgotPass && (
+          {!forgotPass ? (
             <RedButton onPress={submitHandler}>
               {isLogging ? 'Log In' : 'Sign Up'}
             </RedButton>
+          ) : (
+            <RedButton onPress={submitHandler}>Send</RedButton>
           )}
         </View>
       </View>
