@@ -13,7 +13,7 @@ const Stack = createStackNavigator();
 
 function NotAuth(): JSX.Element {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator>
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="SignUpScreen" component={SignUpScreen} />

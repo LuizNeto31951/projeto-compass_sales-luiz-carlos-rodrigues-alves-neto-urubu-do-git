@@ -1,42 +1,44 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+// AuthenticationForm.tsx
 
+import React, {useEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
 import RedButton from '../ui/RedButton';
 import Input from './Input';
 import TextButton from '../ui/TextButton';
 import {useNavigation} from '@react-navigation/native';
+import {AuthContext} from '../../context/authContext';
+import {Colors} from '../../constants/styles';
 
 interface AuthenticationFormProps {
   isLogging: boolean;
   forgotPass?: boolean;
+  isValidated: (validate: boolean) => void;
   onSubmit: (credentials: {
     name: string;
     email: string;
     password: string;
   }) => void;
-  inputInvalid: {
-    name: boolean;
-    email: boolean;
-    password: boolean;
-  };
+  accountIsValid: boolean; // Receive accountIsValid as a prop
 }
 
 const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
   isLogging,
   forgotPass,
+  isValidated,
   onSubmit,
-  inputInvalid,
+  accountIsValid, // Receive accountIsValid as a prop
 }) => {
-  const [showImage, setShowImage] = React.useState(false);
+  const [showAfter, setShowAfter] = React.useState(false);
   const [enteredName, setEnteredName] = React.useState<string>('');
   const [enteredEmail, setEnteredEmail] = React.useState<string>('');
   const [enteredPassword, setEnteredPassword] = React.useState<string>('');
+  const [isValid, setIsValid] = React.useState({
+    name: false,
+    email: false,
+    password: false,
+  });
 
-  const {
-    name: nameIsInvald,
-    email: emailIsInvalid,
-    password: passwordIsInvalid,
-  } = inputInvalid;
+  const ctx = React.useContext(AuthContext);
 
   const navigation = useNavigation();
 
@@ -54,23 +56,58 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
     }
   };
 
+  useEffect(() => {
+    const name = enteredName.trim();
+    const email = enteredEmail.trim();
+    const password = enteredPassword.trim();
+
+    let nameIsValid = false;
+    if (!isLogging) {
+      nameIsValid = name.length > 0;
+    } else {
+      nameIsValid = true;
+    }
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailIsValid = emailPattern.test(email);
+    const passwordIsValid = password.length > 6;
+
+    setIsValid({
+      name: nameIsValid,
+      email: emailIsValid,
+      password: passwordIsValid,
+    });
+
+    if (forgotPass) {
+      isValidated(true);
+    } else {
+      isValidated(nameIsValid && emailIsValid && passwordIsValid);
+    }
+  }, [
+    enteredName,
+    enteredEmail,
+    enteredPassword,
+    forgotPass,
+    isLogging,
+    isValidated,
+  ]);
+
   const submitHandler = () => {
     onSubmit({
       name: enteredName,
       email: enteredEmail,
       password: enteredPassword,
     });
-    setShowImage(true);
+    setShowAfter(true);
   };
 
   const forgotHandler = () => {
-    setShowImage(false);
+    setShowAfter(false);
     navigation.navigate('ForgotPassword' as never);
   };
 
   const backHandler = () => {
-    setShowImage(false);
-    navigation.goBack();
+    setShowAfter(false);
+    navigation.navigate('LoginScreen' as never);
   };
 
   return (
@@ -84,9 +121,12 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
             }
             value={enteredName}
             keyboardType="default"
-            isInvalid={nameIsInvald}
-            showImage={showImage}
+            showAfter={showAfter}
             isPassword={false}
+            isValid={isValid.name}
+            message="Name should not be empty"
+            labelStyle={isValid.name ? undefined : styles.labelInvalid}
+            viewStyle={isValid.name ? undefined : styles.containerInvalid}
           />
         )}
         <Input
@@ -96,9 +136,12 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
           }
           value={enteredEmail}
           keyboardType="email-address"
-          isInvalid={emailIsInvalid}
-          showImage={showImage}
+          showAfter={showAfter}
           isPassword={false}
+          isValid={isValid.email}
+          message="Email must be valid. Example : example@example.com"
+          labelStyle={isValid.email ? undefined : styles.labelInvalid}
+          viewStyle={isValid.email ? undefined : styles.containerInvalid}
         />
         {!forgotPass && (
           <Input
@@ -108,12 +151,14 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
             }
             value={enteredPassword}
             keyboardType="default"
-            isInvalid={passwordIsInvalid}
-            showImage={showImage}
+            showAfter={showAfter}
             isPassword={true}
+            isValid={isValid.password}
+            message="Password must have at least 6 characters"
+            labelStyle={isValid.password ? undefined : styles.labelInvalid}
+            viewStyle={isValid.password ? undefined : styles.containerInvalid}
           />
         )}
-
         <View style={styles.buttons}>
           {!forgotPass ? (
             isLogging ? (
@@ -135,7 +180,10 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
             )
           ) : null}
           {!forgotPass ? (
-            <RedButton onPress={submitHandler}>
+            <RedButton
+              onPress={submitHandler}
+              disabled={!accountIsValid} // Disable the button when account is not valid
+            >
               {isLogging ? 'Log In' : 'Sign Up'}
             </RedButton>
           ) : (
@@ -146,8 +194,6 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
     </View>
   );
 };
-
-export default AuthenticationForm;
 
 const styles = StyleSheet.create({
   form: {
@@ -165,4 +211,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 32,
   },
+  labelInvalid: {
+    color: Colors.errorLabel,
+  },
+  containerInvalid: {
+    borderWidth: 1,
+    borderColor: Colors.errorInput,
+  },
 });
+
+export default AuthenticationForm;

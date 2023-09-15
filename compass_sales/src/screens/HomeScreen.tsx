@@ -3,9 +3,9 @@ import {View} from 'react-native';
 import RedButton from '../components/ui/RedButton';
 import {AuthContext} from '../context/authContext';
 import {Title} from '../components/ui/Title';
-import {fetchUser} from '../components/util/firebase';
 import {useIsFocused} from '@react-navigation/native';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
+import {fetchUser} from '../components/util/Firebase';
 
 function HomeScreen(): JSX.Element {
   const ctx = React.useContext(AuthContext);
@@ -18,9 +18,10 @@ function HomeScreen(): JSX.Element {
     async function getUser() {
       const user = await fetchUser(ctx.id);
       setUser(user);
+      console.log(user);
+      setLoading(false);
     }
     getUser();
-    setLoading(false);
   }, [ctx.isLogged, ctx.id, isFocused]);
 
   if (loading) {

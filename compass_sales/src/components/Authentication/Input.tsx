@@ -1,45 +1,61 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Image} from 'react-native';
-
-import {Colors} from '../../constants/styles';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Image,
+  TextStyle,
+  ViewStyle,
+} from 'react-native';
 
 interface InputProps {
   label: string;
   keyboardType: any;
   onUpdateValue: (text: string) => void;
   value: string;
-  isInvalid: boolean;
-  showImage: boolean;
+  showAfter: boolean;
   isPassword: boolean;
+  isValid: boolean;
+  message: string;
+  labelStyle?: TextStyle;
+  viewStyle?: ViewStyle;
 }
 
 const Input: React.FC<InputProps> = props => {
   return (
-    <View
-      style={[styles.container, props.isInvalid && styles.containerInvalid]}>
-      <Text style={[styles.label, props.isInvalid && styles.labelInvalid]}>
-        {props.label}
-      </Text>
-      <View style={styles.inverse}>
-        <TextInput
-          autoCapitalize="none"
-          style={styles.input}
-          keyboardType={props.keyboardType}
-          onChangeText={props.onUpdateValue}
-          value={props.value}
-          secureTextEntry={props.isPassword}
-        />
-        {props.showImage &&
-          (props.isInvalid ? (
-            <Image
-              source={require('../../assets/icons/outline-close-24px.png')}
-            />
-          ) : (
-            <Image
-              source={require('../../assets/icons/outline-check-24px.png')}
-            />
-          ))}
+    <View>
+      <View style={[styles.container,props.showAfter && props.viewStyle]}>
+        <Text style={[styles.label,props.showAfter && props.labelStyle]}>{props.label}</Text>
+        <View style={styles.inverse}>
+          <TextInput
+            autoCapitalize="none"
+            style={styles.input}
+            keyboardType={props.keyboardType}
+            onChangeText={props.onUpdateValue}
+            value={props.value}
+            secureTextEntry={props.isPassword}
+          />
+          {props.showAfter ? (
+            !props.isValid ? (
+              <Image
+                source={require('../../assets/icons/outline-close-24px.png')}
+              />
+            ) : (
+              <Image
+                source={require('../../assets/icons/outline-check-24px.png')}
+              />
+            )
+          ) : undefined}
+        </View>
       </View>
+      {props.showAfter
+        ? !props.isValid && (
+            <Text style={[styles.label, props.labelStyle, styles.errorLabel]}>
+              {props.message}
+            </Text>
+          )
+        : undefined}
     </View>
   );
 };
@@ -53,19 +69,12 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     borderRadius: 5,
   },
-  containerInvalid: {
-    borderWidth: 1,
-    borderColor: Colors.errorInput,
-  },
   label: {
     color: 'gray',
     marginBottom: 4,
     marginLeft: 20,
     marginTop: 10,
     fontSize: 12,
-  },
-  labelInvalid: {
-    color: Colors.errorLabel,
   },
   input: {
     flex: 1,
@@ -80,4 +89,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginRight: 16,
   },
+  errorLabel: {
+    marginTop: 0,
+  }
 });

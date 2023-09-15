@@ -1,10 +1,11 @@
-import React from 'react';
-import {Alert, StyleSheet, View} from 'react-native';
+// AuthenticationHandler.tsx
 
+import React, { useEffect } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
 import AuthenticationForm from './AuthenticationForm';
 import RedButton from '../ui/RedButton';
-import {Title} from '../ui/Title';
-import {useNavigation} from '@react-navigation/native';
+import { Title } from '../ui/Title';
+import { useNavigation } from '@react-navigation/native';
 
 interface AuthenticationHandlerProps {
   isLogging?: boolean;
@@ -16,24 +17,26 @@ interface AuthenticationHandlerProps {
   }) => void;
 }
 
-interface isValid {
-  name: boolean;
-  email: boolean;
-  password: boolean;
-}
-
 function AuthenticationHandler({
   isLogging,
   Authenticate,
   forgotPass,
 }: AuthenticationHandlerProps) {
-  const [isValid, setIsValid] = React.useState<isValid>({
-    name: false,
-    email: false,
-    password: false,
-  });
-
   const navigation = useNavigation();
+  const [accountIsValid, setAccountIsValid] = React.useState(false);
+
+  const recieveValidation = (validation: boolean) => {
+    setAccountIsValid(validation);
+  };
+
+  useEffect(() => {
+    // Update accountIsValid when forgotPass or isLogging changes
+    if (forgotPass || isLogging) {
+      setAccountIsValid(true);
+    } else {
+      setAccountIsValid(false);
+    }
+  }, [forgotPass, isLogging]);
 
   const switchAuthModeHandler = () => {
     if (isLogging) {
@@ -48,44 +51,12 @@ function AuthenticationHandler({
     email: string;
     password: string;
   }) => {
-    let {name, email, password} = credentials;
-
-    name = name.trim();
-    email = email.trim();
-    password = password.trim();
-
-    let nameIsValid = false;
-    if (!isLogging) {
-      nameIsValid = name.length > 0;
+    let { name, email, password } = credentials;
+    if (accountIsValid) {
+      Authenticate({ name, email, password });
     } else {
-      nameIsValid = true;
+      Alert.alert('Validation Error', 'Please fill in all required fields.');
     }
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const emailIsValid = emailPattern.test(email);
-    const passwordIsValid = password.length > 6;
-
-    if(forgotPass){
-      setIsValid({
-        name: true,
-        email: !emailIsValid,
-        password: true,
-      });
-      if(isValid){
-        Authenticate({name, email, password});
-      }
-      return;
-    }
-
-    if (!nameIsValid || !emailIsValid || !passwordIsValid) {
-      Alert.alert('Invalid input', 'Try again.');
-      setIsValid({
-        name: !nameIsValid,
-        email: !emailIsValid,
-        password: !passwordIsValid,
-      });
-      return;
-    }
-    Authenticate({name, email, password});
   };
 
   return (
@@ -97,11 +68,16 @@ function AuthenticationHandler({
         isLogging={isLogging ? true : false}
         forgotPass={forgotPass ? true : false}
         onSubmit={submitHandler}
-        inputInvalid={isValid}
+        isValidated={recieveValidation}
+        accountIsValid={accountIsValid}
       />
       <View style={styles.buttons}>
         {isLogging && (
-        <RedButton onPress={switchAuthModeHandler}>Create a new user</RedButton>
+          <RedButton
+            onPress={switchAuthModeHandler}
+          >
+            Create a new user
+          </RedButton>
         )}
       </View>
     </View>
