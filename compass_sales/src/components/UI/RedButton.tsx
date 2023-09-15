@@ -6,7 +6,7 @@ import { Colors } from '../../constants/styles';
 interface RedButtonProps {
   onPress: () => void;
   children: React.ReactNode;
-  disabled?: boolean; // Add a disabled prop
+  disabled?: boolean;
 }
 
 const RedButton: React.FC<RedButtonProps> = (props) => {
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   disabledButton: {
-    backgroundColor: Colors.disabledButtonRed, // Define a style for disabled button
-    opacity: 0.7, // Adjust opacity for disabled button
+    backgroundColor: Colors.disabledButtonRed,
+    opacity: 0.7,
   },
 });

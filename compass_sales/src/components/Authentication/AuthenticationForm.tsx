@@ -1,5 +1,3 @@
-// AuthenticationForm.tsx
-
 import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import RedButton from '../ui/RedButton';
@@ -18,7 +16,7 @@ interface AuthenticationFormProps {
     email: string;
     password: string;
   }) => void;
-  accountIsValid: boolean; // Receive accountIsValid as a prop
+  accountIsValid: boolean;
 }
 
 const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
@@ -26,7 +24,7 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
   forgotPass,
   isValidated,
   onSubmit,
-  accountIsValid, // Receive accountIsValid as a prop
+  accountIsValid,
 }) => {
   const [showAfter, setShowAfter] = React.useState(false);
   const [enteredName, setEnteredName] = React.useState<string>('');
@@ -182,7 +180,7 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
           {!forgotPass ? (
             <RedButton
               onPress={submitHandler}
-              disabled={!accountIsValid} // Disable the button when account is not valid
+              disabled={!accountIsValid}
             >
               {isLogging ? 'Log In' : 'Sign Up'}
             </RedButton>

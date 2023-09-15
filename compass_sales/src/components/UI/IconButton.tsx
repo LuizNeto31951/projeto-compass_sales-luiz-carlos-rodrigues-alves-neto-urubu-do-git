@@ -3,12 +3,12 @@ import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
 
 import {Colors} from '../../constants/styles';
 
-interface RedButtonProps {
+interface IconButtonProps {
   onPress: () => void;
   children: React.ReactNode;
 }
 
-const RedButton: React.FC<RedButtonProps> = props => {
+const IconButton: React.FC<IconButtonProps> = props => {
   return (
     <TouchableOpacity onPress={props.onPress}>
       <View style={styles.button}>
@@ -18,13 +18,13 @@ const RedButton: React.FC<RedButtonProps> = props => {
   );
 };
 
-export default RedButton;
+export default IconButton;
 
 const styles = StyleSheet.create({
   button: {
     borderRadius: 15,
     padding: 10,
-    backgroundColor: Colors.buttonRed,
+    backgroundColor: "white",
     elevation: 2,
     shadowColor: 'black',
     alignItems: 'center',

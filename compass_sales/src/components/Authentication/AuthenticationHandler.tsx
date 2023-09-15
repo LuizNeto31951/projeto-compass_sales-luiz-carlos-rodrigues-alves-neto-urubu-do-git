@@ -1,5 +1,3 @@
-// AuthenticationHandler.tsx
-
 import React, { useEffect } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import AuthenticationForm from './AuthenticationForm';
@@ -30,7 +28,6 @@ function AuthenticationHandler({
   };
 
   useEffect(() => {
-    // Update accountIsValid when forgotPass or isLogging changes
     if (forgotPass || isLogging) {
       setAccountIsValid(true);
     } else {

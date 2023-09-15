@@ -13,7 +13,7 @@ const Stack = createStackNavigator();
 
 function NotAuth(): JSX.Element {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator >
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
@@ -43,7 +43,7 @@ function Navigation(): JSX.Element {
 function App(): JSX.Element {
   return (
     <>
-      <StatusBar barStyle={'light-content'} />
+      <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
       <AuthContextProvider>
         <Navigation />
       </AuthContextProvider>
