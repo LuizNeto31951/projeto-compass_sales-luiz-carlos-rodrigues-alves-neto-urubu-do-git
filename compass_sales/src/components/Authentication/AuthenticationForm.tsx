@@ -11,6 +11,7 @@ import {Colors} from '../../constants/styles';
 interface AuthenticationFormProps {
   isLogging: boolean;
   forgotPass?: boolean;
+  isValidated: (validate: boolean) => void;
   onSubmit: (credentials: {
     name: string;
     email: string;
@@ -21,6 +22,7 @@ interface AuthenticationFormProps {
 const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
   isLogging,
   forgotPass,
+  isValidated,
   onSubmit,
 }) => {
   interface isValid {
@@ -45,21 +47,9 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
   const navigation = useNavigation();
 
   const updateInputValueHandler = (inputType: string, enteredValue: string) => {
-    switch (inputType) {
-      case 'name':
-        setEnteredName(enteredValue);
-        break;
-      case 'email':
-        setEnteredEmail(enteredValue);
-        break;
-      case 'password':
-        setEnteredPassword(enteredValue);
-        break;
-    }
-
-    let name = enteredName.trim();
-    let email = enteredEmail.trim();
-    let password = enteredPassword.trim();
+    const name = enteredName.trim();
+    const email = enteredEmail.trim();
+    const password = enteredPassword.trim();
 
     let nameIsValid = false;
     if (!isLogging) {
@@ -84,8 +74,17 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
         password: passwordIsValid,
       });
     }
-    if (nameIsValid && emailIsValid && passwordIsValid) {
-      ctx.isValid;
+    
+    switch (inputType) {
+      case 'name':
+        setEnteredName(enteredValue);
+        break;
+      case 'email':
+        setEnteredEmail(enteredValue);
+        break;
+      case 'password':
+        setEnteredPassword(enteredValue);
+        break;
     }
   };
 
@@ -95,6 +94,12 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
       email: enteredEmail,
       password: enteredPassword,
     });
+    const allTruthy = Object.values(isValid).every(Boolean);
+    if (allTruthy) {
+      isValidated(true);
+    } else {
+      isValidated(false);
+    }
     setShowAfter(true);
   };
 

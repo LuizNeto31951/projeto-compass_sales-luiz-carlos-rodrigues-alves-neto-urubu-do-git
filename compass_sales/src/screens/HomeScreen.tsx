@@ -18,6 +18,7 @@ function HomeScreen(): JSX.Element {
     async function getUser() {
       const user = await fetchUser(ctx.id);
       setUser(user);
+      console.log(user);
       setLoading(false);
     }
     getUser();

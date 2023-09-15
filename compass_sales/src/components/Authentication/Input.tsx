@@ -24,32 +24,34 @@ interface InputProps {
 
 const Input: React.FC<InputProps> = props => {
   return (
-    <View style={[styles.container, props.viewStyle]}>
-      <Text style={[styles.label, props.labelStyle]}>{props.label}</Text>
-      <View style={styles.inverse}>
-        <TextInput
-          autoCapitalize="none"
-          style={styles.input}
-          keyboardType={props.keyboardType}
-          onChangeText={props.onUpdateValue}
-          value={props.value}
-          secureTextEntry={props.isPassword}
-        />
-        {props.showAfter ? (
-          !props.isValid ? (
-            <Image
-              source={require('../../assets/icons/outline-close-24px.png')}
-            />
-          ) : (
-            <Image
-              source={require('../../assets/icons/outline-check-24px.png')}
-            />
-          )
-        ) : undefined}
+    <View>
+      <View style={[styles.container,props.showAfter && props.viewStyle]}>
+        <Text style={[styles.label,props.showAfter && props.labelStyle]}>{props.label}</Text>
+        <View style={styles.inverse}>
+          <TextInput
+            autoCapitalize="none"
+            style={styles.input}
+            keyboardType={props.keyboardType}
+            onChangeText={props.onUpdateValue}
+            value={props.value}
+            secureTextEntry={props.isPassword}
+          />
+          {props.showAfter ? (
+            !props.isValid ? (
+              <Image
+                source={require('../../assets/icons/outline-close-24px.png')}
+              />
+            ) : (
+              <Image
+                source={require('../../assets/icons/outline-check-24px.png')}
+              />
+            )
+          ) : undefined}
+        </View>
       </View>
       {props.showAfter
         ? !props.isValid && (
-            <Text style={[styles.label, props.labelStyle]}>
+            <Text style={[styles.label, props.labelStyle, styles.errorLabel]}>
               {props.message}
             </Text>
           )
@@ -87,4 +89,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginRight: 16,
   },
+  errorLabel: {
+    marginTop: 0,
+  }
 });

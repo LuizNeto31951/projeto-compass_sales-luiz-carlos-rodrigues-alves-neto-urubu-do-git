@@ -5,7 +5,6 @@ import AuthenticationForm from './AuthenticationForm';
 import RedButton from '../ui/RedButton';
 import {Title} from '../ui/Title';
 import {useNavigation} from '@react-navigation/native';
-import {AuthContext} from '../../context/authContext';
 
 interface AuthenticationHandlerProps {
   isLogging?: boolean;
@@ -23,7 +22,11 @@ function AuthenticationHandler({
   forgotPass,
 }: AuthenticationHandlerProps) {
   const navigation = useNavigation();
-  const ctx = React.useContext(AuthContext);
+  const [accountIsValid, setAccountIsValid] = React.useState(false);
+
+  const recieveValidation = (validation: boolean) => {
+    setAccountIsValid(validation);
+  };
 
   const switchAuthModeHandler = () => {
     if (isLogging) {
@@ -39,8 +42,7 @@ function AuthenticationHandler({
     password: string;
   }) => {
     let {name, email, password} = credentials;
-    console.log(ctx.valid)
-    if (ctx.valid) {
+    if (accountIsValid) {
       Authenticate({name, email, password});
     }
   };
@@ -54,6 +56,7 @@ function AuthenticationHandler({
         isLogging={isLogging ? true : false}
         forgotPass={forgotPass ? true : false}
         onSubmit={submitHandler}
+        isValidated={recieveValidation}
       />
       <View style={styles.buttons}>
         {isLogging && (
