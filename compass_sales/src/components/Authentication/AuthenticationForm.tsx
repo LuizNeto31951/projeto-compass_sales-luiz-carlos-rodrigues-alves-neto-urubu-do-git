@@ -1,6 +1,7 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+// AuthenticationForm.tsx
 
+import React, {useEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
 import RedButton from '../ui/RedButton';
 import Input from './Input';
 import TextButton from '../ui/TextButton';
@@ -17,6 +18,7 @@ interface AuthenticationFormProps {
     email: string;
     password: string;
   }) => void;
+  accountIsValid: boolean; // Receive accountIsValid as a prop
 }
 
 const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
@@ -24,29 +26,37 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
   forgotPass,
   isValidated,
   onSubmit,
+  accountIsValid, // Receive accountIsValid as a prop
 }) => {
-  interface isValid {
-    name: boolean;
-    email: boolean;
-    password: boolean;
-  }
-
-  const [isValid, setIsValid] = React.useState<isValid>({
-    name: false,
-    email: false,
-    password: false,
-  });
-
   const [showAfter, setShowAfter] = React.useState(false);
   const [enteredName, setEnteredName] = React.useState<string>('');
   const [enteredEmail, setEnteredEmail] = React.useState<string>('');
   const [enteredPassword, setEnteredPassword] = React.useState<string>('');
+  const [isValid, setIsValid] = React.useState({
+    name: false,
+    email: false,
+    password: false,
+  });
 
   const ctx = React.useContext(AuthContext);
 
   const navigation = useNavigation();
 
   const updateInputValueHandler = (inputType: string, enteredValue: string) => {
+    switch (inputType) {
+      case 'name':
+        setEnteredName(enteredValue);
+        break;
+      case 'email':
+        setEnteredEmail(enteredValue);
+        break;
+      case 'password':
+        setEnteredPassword(enteredValue);
+        break;
+    }
+  };
+
+  useEffect(() => {
     const name = enteredName.trim();
     const email = enteredEmail.trim();
     const password = enteredPassword.trim();
@@ -61,32 +71,25 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
     const emailIsValid = emailPattern.test(email);
     const passwordIsValid = password.length > 6;
 
+    setIsValid({
+      name: nameIsValid,
+      email: emailIsValid,
+      password: passwordIsValid,
+    });
+
     if (forgotPass) {
-      setIsValid({
-        name: true,
-        email: emailIsValid,
-        password: true,
-      });
+      isValidated(true);
     } else {
-      setIsValid({
-        name: nameIsValid,
-        email: emailIsValid,
-        password: passwordIsValid,
-      });
+      isValidated(nameIsValid && emailIsValid && passwordIsValid);
     }
-    
-    switch (inputType) {
-      case 'name':
-        setEnteredName(enteredValue);
-        break;
-      case 'email':
-        setEnteredEmail(enteredValue);
-        break;
-      case 'password':
-        setEnteredPassword(enteredValue);
-        break;
-    }
-  };
+  }, [
+    enteredName,
+    enteredEmail,
+    enteredPassword,
+    forgotPass,
+    isLogging,
+    isValidated,
+  ]);
 
   const submitHandler = () => {
     onSubmit({
@@ -94,12 +97,6 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
       email: enteredEmail,
       password: enteredPassword,
     });
-    const allTruthy = Object.values(isValid).every(Boolean);
-    if (allTruthy) {
-      isValidated(true);
-    } else {
-      isValidated(false);
-    }
     setShowAfter(true);
   };
 
@@ -162,7 +159,6 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
             viewStyle={isValid.password ? undefined : styles.containerInvalid}
           />
         )}
-
         <View style={styles.buttons}>
           {!forgotPass ? (
             isLogging ? (
@@ -184,7 +180,10 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
             )
           ) : null}
           {!forgotPass ? (
-            <RedButton onPress={submitHandler}>
+            <RedButton
+              onPress={submitHandler}
+              disabled={!accountIsValid} // Disable the button when account is not valid
+            >
               {isLogging ? 'Log In' : 'Sign Up'}
             </RedButton>
           ) : (
@@ -195,8 +194,6 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
     </View>
   );
 };
-
-export default AuthenticationForm;
 
 const styles = StyleSheet.create({
   form: {
@@ -222,3 +219,5 @@ const styles = StyleSheet.create({
     borderColor: Colors.errorInput,
   },
 });
+
+export default AuthenticationForm;

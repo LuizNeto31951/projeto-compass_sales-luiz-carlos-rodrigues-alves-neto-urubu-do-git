@@ -1,17 +1,18 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 
-import {Colors} from '../../constants/styles';
+import { Colors } from '../../constants/styles';
 
 interface RedButtonProps {
   onPress: () => void;
   children: React.ReactNode;
+  disabled?: boolean; // Add a disabled prop
 }
 
-const RedButton: React.FC<RedButtonProps> = props => {
+const RedButton: React.FC<RedButtonProps> = (props) => {
   return (
-    <TouchableOpacity onPress={props.onPress}>
-      <View style={styles.button}>
+    <TouchableOpacity onPress={props.onPress} disabled={props.disabled}>
+      <View style={[styles.button, props.disabled && styles.disabledButton]}>
         <Text style={styles.buttonText}>{props.children}</Text>
       </View>
     </TouchableOpacity>
@@ -35,5 +36,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textTransform: 'uppercase',
     fontWeight: 'bold',
+  },
+  disabledButton: {
+    backgroundColor: Colors.disabledButtonRed, // Define a style for disabled button
+    opacity: 0.7, // Adjust opacity for disabled button
   },
 });

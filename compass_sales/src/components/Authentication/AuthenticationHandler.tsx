@@ -1,10 +1,11 @@
-import React from 'react';
-import {Alert, StyleSheet, View} from 'react-native';
+// AuthenticationHandler.tsx
 
+import React, { useEffect } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
 import AuthenticationForm from './AuthenticationForm';
 import RedButton from '../ui/RedButton';
-import {Title} from '../ui/Title';
-import {useNavigation} from '@react-navigation/native';
+import { Title } from '../ui/Title';
+import { useNavigation } from '@react-navigation/native';
 
 interface AuthenticationHandlerProps {
   isLogging?: boolean;
@@ -28,6 +29,15 @@ function AuthenticationHandler({
     setAccountIsValid(validation);
   };
 
+  useEffect(() => {
+    // Update accountIsValid when forgotPass or isLogging changes
+    if (forgotPass || isLogging) {
+      setAccountIsValid(true);
+    } else {
+      setAccountIsValid(false);
+    }
+  }, [forgotPass, isLogging]);
+
   const switchAuthModeHandler = () => {
     if (isLogging) {
       navigation.navigate('SignUpScreen' as never);
@@ -41,9 +51,11 @@ function AuthenticationHandler({
     email: string;
     password: string;
   }) => {
-    let {name, email, password} = credentials;
+    let { name, email, password } = credentials;
     if (accountIsValid) {
-      Authenticate({name, email, password});
+      Authenticate({ name, email, password });
+    } else {
+      Alert.alert('Validation Error', 'Please fill in all required fields.');
     }
   };
 
@@ -57,10 +69,13 @@ function AuthenticationHandler({
         forgotPass={forgotPass ? true : false}
         onSubmit={submitHandler}
         isValidated={recieveValidation}
+        accountIsValid={accountIsValid}
       />
       <View style={styles.buttons}>
         {isLogging && (
-          <RedButton onPress={switchAuthModeHandler}>
+          <RedButton
+            onPress={switchAuthModeHandler}
+          >
             Create a new user
           </RedButton>
         )}

@@ -8,8 +8,10 @@ function ForgotPassword(): JSX.Element {
     email: string;
   }
   function forgotHandler({email}: forgotProps) {
+    console.log(email);
     try {
       resetPassword(email)
+      Alert.alert("Email sent succesfully", "Check your email for changing your password!")
     } catch (error) {
       Alert.alert("Failed to send email", "Check credentials!")
     }
