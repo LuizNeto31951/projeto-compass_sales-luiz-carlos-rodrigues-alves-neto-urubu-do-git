@@ -1,11 +1,9 @@
-// AuthenticationHandler.tsx
-
-import React, { useEffect } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import React, {useEffect} from 'react';
+import {Alert, StyleSheet, View} from 'react-native';
 import AuthenticationForm from './AuthenticationForm';
 import RedButton from '../ui/RedButton';
-import { Title } from '../ui/Title';
-import { useNavigation } from '@react-navigation/native';
+import {Title} from '../ui/Title';
+import {useNavigation} from '@react-navigation/native';
 
 interface AuthenticationHandlerProps {
   isLogging?: boolean;
@@ -30,7 +28,6 @@ function AuthenticationHandler({
   };
 
   useEffect(() => {
-    // Update accountIsValid when forgotPass or isLogging changes
     if (forgotPass || isLogging) {
       setAccountIsValid(true);
     } else {
@@ -51,16 +48,16 @@ function AuthenticationHandler({
     email: string;
     password: string;
   }) => {
-    let { name, email, password } = credentials;
+    let {name, email, password} = credentials;
     if (accountIsValid) {
-      Authenticate({ name, email, password });
+      Authenticate({name, email, password});
     } else {
       Alert.alert('Validation Error', 'Please fill in all required fields.');
     }
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <Title>
         {forgotPass ? 'Forgot Password' : isLogging ? 'Login' : 'Sign in'}
       </Title>
@@ -73,9 +70,7 @@ function AuthenticationHandler({
       />
       <View style={styles.buttons}>
         {isLogging && (
-          <RedButton
-            onPress={switchAuthModeHandler}
-          >
+          <RedButton onPress={switchAuthModeHandler}>
             Create a new user
           </RedButton>
         )}
@@ -85,6 +80,7 @@ function AuthenticationHandler({
 }
 
 const styles = StyleSheet.create({
+  container: {backgroundColor: 'white'},
   buttons: {
     marginTop: 8,
     marginHorizontal: 16,

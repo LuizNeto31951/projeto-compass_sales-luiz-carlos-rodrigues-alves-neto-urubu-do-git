@@ -1,5 +1,3 @@
-// AuthenticationForm.tsx
-
 import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import RedButton from '../ui/RedButton';
@@ -18,7 +16,7 @@ interface AuthenticationFormProps {
     email: string;
     password: string;
   }) => void;
-  accountIsValid: boolean; // Receive accountIsValid as a prop
+  accountIsValid: boolean;
 }
 
 const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
@@ -26,9 +24,8 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
   forgotPass,
   isValidated,
   onSubmit,
-  accountIsValid, // Receive accountIsValid as a prop
+  accountIsValid,
 }) => {
-  const [showAfter, setShowAfter] = React.useState(false);
   const [enteredName, setEnteredName] = React.useState<string>('');
   const [enteredEmail, setEnteredEmail] = React.useState<string>('');
   const [enteredPassword, setEnteredPassword] = React.useState<string>('');
@@ -69,7 +66,7 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
     }
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const emailIsValid = emailPattern.test(email);
-    const passwordIsValid = password.length > 6;
+    const passwordIsValid = password.length >= 6;
 
     setIsValid({
       name: nameIsValid,
@@ -97,16 +94,13 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
       email: enteredEmail,
       password: enteredPassword,
     });
-    setShowAfter(true);
   };
 
   const forgotHandler = () => {
-    setShowAfter(false);
     navigation.navigate('ForgotPassword' as never);
   };
 
   const backHandler = () => {
-    setShowAfter(false);
     navigation.navigate('LoginScreen' as never);
   };
 
@@ -121,7 +115,6 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
             }
             value={enteredName}
             keyboardType="default"
-            showAfter={showAfter}
             isPassword={false}
             isValid={isValid.name}
             message="Name should not be empty"
@@ -136,7 +129,6 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
           }
           value={enteredEmail}
           keyboardType="email-address"
-          showAfter={showAfter}
           isPassword={false}
           isValid={isValid.email}
           message="Email must be valid. Example : example@example.com"
@@ -151,7 +143,6 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
             }
             value={enteredPassword}
             keyboardType="default"
-            showAfter={showAfter}
             isPassword={true}
             isValid={isValid.password}
             message="Password must have at least 6 characters"
@@ -180,10 +171,7 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
             )
           ) : null}
           {!forgotPass ? (
-            <RedButton
-              onPress={submitHandler}
-              disabled={!accountIsValid} // Disable the button when account is not valid
-            >
+            <RedButton onPress={submitHandler} disabled={!accountIsValid}>
               {isLogging ? 'Log In' : 'Sign Up'}
             </RedButton>
           ) : (
@@ -200,7 +188,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   buttons: {
-    marginTop: 16,
+    marginTop: 2,
   },
   text: {
     fontSize: 15,
