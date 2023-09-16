@@ -14,7 +14,6 @@ interface InputProps {
   keyboardType: any;
   onUpdateValue: (text: string) => void;
   value: string;
-  showAfter: boolean;
   isPassword: boolean;
   isValid: boolean;
   message: string;
@@ -23,39 +22,48 @@ interface InputProps {
 }
 
 const Input: React.FC<InputProps> = props => {
+  const [hasInput, setHasInput] = React.useState(false);
+
+  const handleInputChange = (text: string) => {
+    if (!hasInput) {
+      setHasInput(true);
+    }
+    props.onUpdateValue(text);
+  };
+
   return (
     <View>
-      <View style={[styles.container,props.showAfter && props.viewStyle]}>
-        <Text style={[styles.label,props.showAfter && props.labelStyle]}>{props.label}</Text>
+      <View
+        style={[
+          styles.container,
+          hasInput && !props.isValid ? props.viewStyle : undefined,
+        ]}>
+        <Text style={[styles.label, hasInput && !props.isValid ? props.labelStyle : undefined]}>{props.label}</Text>
         <View style={styles.inverse}>
           <TextInput
             autoCapitalize="none"
             style={styles.input}
             keyboardType={props.keyboardType}
-            onChangeText={props.onUpdateValue}
+            onChangeText={handleInputChange}
             value={props.value}
             secureTextEntry={props.isPassword}
           />
-          {props.showAfter ? (
-            !props.isValid ? (
-              <Image
-                source={require('../../assets/icons/outline-close-24px.png')}
-              />
-            ) : (
-              <Image
-                source={require('../../assets/icons/outline-check-24px.png')}
-              />
-            )
-          ) : undefined}
+          {hasInput?(!props.isValid ? (
+            <Image
+              source={require('../../assets/icons/outline-close-24px.png')}
+            />
+          ) : (
+            <Image
+              source={require('../../assets/icons/outline-check-24px.png')}
+            />
+          )):undefined}
         </View>
       </View>
-      {props.showAfter
-        ? !props.isValid && (
-            <Text style={[styles.label, props.labelStyle, styles.errorLabel]}>
-              {props.message}
-            </Text>
-          )
-        : undefined}
+      {hasInput && !props.isValid && (
+        <Text style={[styles.label, props.labelStyle, styles.errorLabel]}>
+          {props.message}
+        </Text>
+      )}
     </View>
   );
 };
@@ -64,10 +72,10 @@ export default Input;
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
-    borderColor: 'gray',
     marginVertical: 8,
     borderRadius: 5,
+    elevation: 1,
+    shadowColor: '#c0c0c0',
   },
   label: {
     color: 'gray',
@@ -91,5 +99,5 @@ const styles = StyleSheet.create({
   },
   errorLabel: {
     marginTop: 0,
-  }
+  },
 });

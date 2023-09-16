@@ -26,7 +26,6 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
   onSubmit,
   accountIsValid,
 }) => {
-  const [showAfter, setShowAfter] = React.useState(false);
   const [enteredName, setEnteredName] = React.useState<string>('');
   const [enteredEmail, setEnteredEmail] = React.useState<string>('');
   const [enteredPassword, setEnteredPassword] = React.useState<string>('');
@@ -67,7 +66,7 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
     }
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const emailIsValid = emailPattern.test(email);
-    const passwordIsValid = password.length > 6;
+    const passwordIsValid = password.length >= 6;
 
     setIsValid({
       name: nameIsValid,
@@ -95,16 +94,13 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
       email: enteredEmail,
       password: enteredPassword,
     });
-    setShowAfter(true);
   };
 
   const forgotHandler = () => {
-    setShowAfter(false);
     navigation.navigate('ForgotPassword' as never);
   };
 
   const backHandler = () => {
-    setShowAfter(false);
     navigation.navigate('LoginScreen' as never);
   };
 
@@ -119,7 +115,6 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
             }
             value={enteredName}
             keyboardType="default"
-            showAfter={showAfter}
             isPassword={false}
             isValid={isValid.name}
             message="Name should not be empty"
@@ -134,7 +129,6 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
           }
           value={enteredEmail}
           keyboardType="email-address"
-          showAfter={showAfter}
           isPassword={false}
           isValid={isValid.email}
           message="Email must be valid. Example : example@example.com"
@@ -149,7 +143,6 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
             }
             value={enteredPassword}
             keyboardType="default"
-            showAfter={showAfter}
             isPassword={true}
             isValid={isValid.password}
             message="Password must have at least 6 characters"
@@ -178,10 +171,7 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
             )
           ) : null}
           {!forgotPass ? (
-            <RedButton
-              onPress={submitHandler}
-              disabled={!accountIsValid}
-            >
+            <RedButton onPress={submitHandler} disabled={!accountIsValid}>
               {isLogging ? 'Log In' : 'Sign Up'}
             </RedButton>
           ) : (

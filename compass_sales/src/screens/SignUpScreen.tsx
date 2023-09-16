@@ -1,9 +1,10 @@
 import React from 'react';
 import AuthenticationHandler from '../components/authentication/AuthenticationHandler';
-import {View, Alert} from 'react-native';
+import {View, Alert, StyleSheet} from 'react-native';
 import {signUp} from '../components/util/Firebase';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
 import {AuthContext} from '../context/authContext';
+import SocialButtons from '../components/Socials/SocialButtons';
 
 function SignUpScreen(): JSX.Element {
   interface signUpProps {
@@ -32,10 +33,18 @@ function SignUpScreen(): JSX.Element {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <AuthenticationHandler Authenticate={signUpHandler} />
+      <SocialButtons/>
     </View>
   );
 }
 
 export default SignUpScreen;
+
+const styles = StyleSheet.create({
+  container:{
+    flex: 1,
+    backgroundColor: 'white'
+  }
+})

@@ -1,9 +1,10 @@
 import React from 'react';
 import AuthenticationHandler from '../components/authentication/AuthenticationHandler';
-import {View, Alert} from 'react-native';
+import {View, Alert,StyleSheet} from 'react-native';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
 import {login} from '../components/util/Firebase';
 import {AuthContext} from '../context/authContext';
+import SocialButtons from '../components/Socials/SocialButtons'
 
 function LoginScreen(): JSX.Element {
   interface loginProps {
@@ -34,10 +35,18 @@ function LoginScreen(): JSX.Element {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <AuthenticationHandler isLogging Authenticate={loginHandler} />
+      <SocialButtons/>
     </View>
   );
 }
 
 export default LoginScreen;
+
+const styles = StyleSheet.create({
+  container:{
+    flex: 1,
+    backgroundColor: 'white'
+  }
+})

@@ -23,7 +23,7 @@ export default RedButton;
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 15,
+    borderRadius: 25,
     padding: 10,
     backgroundColor: Colors.buttonRed,
     elevation: 2,

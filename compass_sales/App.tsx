@@ -8,7 +8,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import SignUpScreen from './src/screens/SignUpScreen';
 import {StatusBar} from 'react-native';
 import AuthContextProvider, {AuthContext} from './src/context/authContext';
-import BackButton from './src/components/ui/backButton';
+import BackButton from './src/components/ui/BackButton';
 
 const Stack = createStackNavigator();
 
@@ -17,7 +17,7 @@ function NotAuth(): JSX.Element {
     <Stack.Navigator screenOptions={{headerTitle: "",}}>
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen options={({ navigation }) => ({headerLeft: () => <BackButton onPress={() => navigation.goBack()} />})} name="ForgotPassword" component={ForgotPassword} />
-      <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+      <Stack.Screen options={({ navigation }) => ({headerLeft: () => <BackButton onPress={() => navigation.goBack()} />})}name="SignUpScreen" component={SignUpScreen} />
     </Stack.Navigator>
   );
 }

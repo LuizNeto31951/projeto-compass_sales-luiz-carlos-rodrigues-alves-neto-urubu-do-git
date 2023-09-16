@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Alert} from 'react-native';
+import {View, Alert, StyleSheet} from 'react-native';
 import AuthenticationHandler from '../components/authentication/AuthenticationHandler';
 import { resetPassword } from '../components/util/Firebase';
 
@@ -18,10 +18,17 @@ function ForgotPassword(): JSX.Element {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <AuthenticationHandler forgotPass Authenticate={forgotHandler} />
     </View>
   );
 }
 
 export default ForgotPassword;
+
+const styles = StyleSheet.create({
+  container:{
+    flex: 1,
+    backgroundColor: 'white'
+  }
+})

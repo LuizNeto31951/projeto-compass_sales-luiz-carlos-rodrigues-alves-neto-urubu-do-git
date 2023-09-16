@@ -2,11 +2,11 @@ import React from 'react';
 import {TouchableOpacity, StyleSheet, Image} from 'react-native';
 
 
-interface IconButtonProps {
+interface BackButtonProps {
   onPress: () => void;
 }
 
-const BackButton: React.FC<IconButtonProps> = props => {
+const BackButton: React.FC<BackButtonProps> = props => {
   return (
     <TouchableOpacity
     style={styles.button}
