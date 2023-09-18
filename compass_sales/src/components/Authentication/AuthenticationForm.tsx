@@ -170,13 +170,17 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = ({
               </TextButton>
             )
           ) : null}
-          {!forgotPass ? (
-            <RedButton onPress={submitHandler} disabled={!accountIsValid}>
-              {isLogging ? 'Log In' : 'Sign Up'}
-            </RedButton>
-          ) : (
-            <RedButton onPress={submitHandler}>Send</RedButton>
-          )}
+          <View style={styles.redButtons}>
+            {!forgotPass ? (
+              <RedButton onPress={submitHandler} disabled={!accountIsValid}>
+                {isLogging ? 'Log In' : 'Sign Up'}
+              </RedButton>
+            ) : (
+              <RedButton onPress={submitHandler} disabled={!isValid.email}>
+                Send
+              </RedButton>
+            )}
+          </View>
         </View>
       </View>
     </View>
@@ -188,7 +192,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   buttons: {
-    marginTop: 2,
+    marginTop: 5,
+  },
+  redButtons: {
+    marginTop: 15,
   },
   text: {
     fontSize: 14,

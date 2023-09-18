@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Alert, StyleSheet, View} from 'react-native';
+import {Alert, StyleSheet, Text, View} from 'react-native';
 import AuthenticationForm from './AuthenticationForm';
 import RedButton from '../ui/RedButton';
 import {Title} from '../ui/Title';
@@ -61,6 +61,10 @@ function AuthenticationHandler({
       <Title>
         {forgotPass ? 'Forgot Password' : isLogging ? 'Login' : 'Sign up'}
       </Title>
+      {forgotPass && <Text style={styles.text}>
+        Please, enter your email address. You will receive a link to create a
+        new password via email.
+      </Text>}
       <AuthenticationForm
         isLogging={isLogging ? true : false}
         forgotPass={forgotPass ? true : false}
@@ -85,6 +89,11 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginHorizontal: 16,
   },
+  text: {
+    color: 'black',
+    paddingHorizontal: 17,
+    marginBottom: 10,
+  }
 });
 
 export default AuthenticationHandler;

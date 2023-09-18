@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Alert, StyleSheet} from 'react-native';
+import {View, Alert, StyleSheet, Text} from 'react-native';
 import AuthenticationHandler from '../components/authentication/AuthenticationHandler';
-import { resetPassword } from '../components/util/Firebase';
+import {resetPassword} from '../components/util/Firebase';
 
 function ForgotPassword(): JSX.Element {
   interface forgotProps {
@@ -10,10 +10,13 @@ function ForgotPassword(): JSX.Element {
   function forgotHandler({email}: forgotProps) {
     console.log(email);
     try {
-      resetPassword(email)
-      Alert.alert("Email sent succesfully", "Check your email for changing your password!")
+      resetPassword(email);
+      Alert.alert(
+        'Email sent succesfully',
+        'Check your email for changing your password!',
+      );
     } catch (error) {
-      Alert.alert("Failed to send email", "Check credentials!")
+      Alert.alert('Failed to send email', 'Check credentials!');
     }
   }
 
@@ -27,8 +30,9 @@ function ForgotPassword(): JSX.Element {
 export default ForgotPassword;
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
     flex: 1,
-    backgroundColor: 'white'
-  }
-})
+    backgroundColor: 'white',
+  },
+
+});
