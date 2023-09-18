@@ -27,5 +27,6 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
     marginBottom: 12,
+    fontFamily: 'RobotoFlex-Regular',
   },
 });

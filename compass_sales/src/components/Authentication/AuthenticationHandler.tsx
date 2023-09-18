@@ -59,7 +59,7 @@ function AuthenticationHandler({
   return (
     <View style={styles.container}>
       <Title>
-        {forgotPass ? 'Forgot Password' : isLogging ? 'Login' : 'Sign in'}
+        {forgotPass ? 'Forgot Password' : isLogging ? 'Login' : 'Sign up'}
       </Title>
       <AuthenticationForm
         isLogging={isLogging ? true : false}

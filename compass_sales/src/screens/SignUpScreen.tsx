@@ -35,7 +35,7 @@ function SignUpScreen(): JSX.Element {
   return (
     <View style={styles.container}>
       <AuthenticationHandler Authenticate={signUpHandler} />
-      <SocialButtons/>
+      <SocialButtons />
     </View>
   );
 }
@@ -43,8 +43,8 @@ function SignUpScreen(): JSX.Element {
 export default SignUpScreen;
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
     flex: 1,
-    backgroundColor: 'white'
-  }
-})
+    backgroundColor: 'white',
+  },
+});

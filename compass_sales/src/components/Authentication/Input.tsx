@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     borderRadius: 4,
     fontSize: 16,
+    fontFamily: 'RobotoFlex-Regular',
     marginLeft: 13,
   },
   inverse: {

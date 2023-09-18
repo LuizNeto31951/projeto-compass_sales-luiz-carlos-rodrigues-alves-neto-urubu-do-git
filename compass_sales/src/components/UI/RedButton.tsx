@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textTransform: 'uppercase',
     fontWeight: 'bold',
+    fontFamily: 'RobotoFlex-Regular',
   },
   disabledButton: {
     backgroundColor: Colors.disabledButtonRed,
