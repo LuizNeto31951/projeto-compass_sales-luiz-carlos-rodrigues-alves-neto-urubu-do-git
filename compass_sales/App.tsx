@@ -16,7 +16,7 @@ function NotAuth(): JSX.Element {
   return (
     <Stack.Navigator screenOptions={{headerTitle: "",}}>
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
-      <Stack.Screen options={({ navigation }) => ({headerLeft: () => <BackButton onPress={() => navigation.goBack()} />})} name="ForgotPassword" component={ForgotPassword} />
+      <Stack.Screen options={({ navigation }) => ({headerLeft: () => <BackButton onPress={() => navigation.goBack()} />})}name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen options={({ navigation }) => ({headerLeft: () => <BackButton onPress={() => navigation.goBack()} />})}name="SignUpScreen" component={SignUpScreen} />
     </Stack.Navigator>
   );

@@ -22,5 +22,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 34,
     color: 'black',
+    fontWeight: 'bold',
+    fontFamily: 'RobotoFlex-Regular',
   },
 });

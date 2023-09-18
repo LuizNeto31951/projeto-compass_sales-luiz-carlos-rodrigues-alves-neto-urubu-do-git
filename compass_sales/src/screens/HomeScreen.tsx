@@ -14,15 +14,16 @@ function HomeScreen(): JSX.Element {
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    setLoading(true);
     async function getUser() {
       const user = await fetchUser(ctx.id);
       setUser(user);
-      console.log(user);
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     }
+    setLoading(true);
     getUser();
-  }, [ctx.isLogged, ctx.id, isFocused]);
+  }, [ctx]);
 
   if (loading) {
     return <LoadingOverlay message="Loading..." />;

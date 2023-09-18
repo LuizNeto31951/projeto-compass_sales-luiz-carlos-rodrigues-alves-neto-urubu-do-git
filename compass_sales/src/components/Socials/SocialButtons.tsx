@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, StyleSheet, Keyboard, Platform} from 'react-native';
+import {Text, View, StyleSheet, Keyboard} from 'react-native';
 import IconButton from '../ui/IconButton';
 
 function SocialButtons() {

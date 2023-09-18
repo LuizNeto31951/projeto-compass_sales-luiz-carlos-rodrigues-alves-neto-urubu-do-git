@@ -191,8 +191,9 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   text: {
-    fontSize: 15,
+    fontSize: 14,
     color: 'black',
+    fontFamily: 'RobotoFlex-Regular',
   },
   container: {
     flexDirection: 'row-reverse',
