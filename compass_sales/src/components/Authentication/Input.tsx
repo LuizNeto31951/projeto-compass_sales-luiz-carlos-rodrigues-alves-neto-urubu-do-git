@@ -25,8 +25,10 @@ const Input: React.FC<InputProps> = props => {
   const [hasInput, setHasInput] = React.useState(false);
 
   const handleInputChange = (text: string) => {
-    if (!hasInput) {
+    if (!hasInput && text !== '') {
       setHasInput(true);
+    } else if (hasInput && text === '') {
+      setHasInput(false);
     }
     props.onUpdateValue(text);
   };
@@ -38,8 +40,15 @@ const Input: React.FC<InputProps> = props => {
           styles.container,
           hasInput && !props.isValid ? props.viewStyle : undefined,
         ]}>
-        <Text style={[styles.label, hasInput && !props.isValid ? props.labelStyle : undefined]}>{props.label}</Text>
-        <View style={styles.inverse}>
+        <Text
+          style={[
+            styles.label,
+            {color: hasInput || props.value ? 'gray' : 'transparent'},
+            hasInput && !props.isValid ? props.labelStyle : undefined,
+          ]}>
+          {hasInput || props.value ? props.label : ''}
+        </Text>
+        <View style={styles.inputContainer}>
           <TextInput
             autoCapitalize="none"
             style={styles.input}
@@ -47,16 +56,20 @@ const Input: React.FC<InputProps> = props => {
             onChangeText={handleInputChange}
             value={props.value}
             secureTextEntry={props.isPassword}
+            placeholder={props.label} // Use o mesmo nome como placeholder
+            placeholderTextColor="gray" // Cor do placeholder
           />
-          {hasInput?(!props.isValid ? (
-            <Image
-              source={require('../../assets/icons/outline-close-24px.png')}
-            />
-          ) : (
-            <Image
-              source={require('../../assets/icons/outline-check-24px.png')}
-            />
-          )):undefined}
+          {hasInput ? (
+            !props.isValid ? (
+              <Image
+                source={require('../../assets/icons/outline-close-24px.png')}
+              />
+            ) : (
+              <Image
+                source={require('../../assets/icons/outline-check-24px.png')}
+              />
+            )
+          ) : null}
         </View>
       </View>
       {hasInput && !props.isValid && (
@@ -72,33 +85,35 @@ export default Input;
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 8,
+    marginTop: 8,
     borderRadius: 5,
-    elevation: 1,
-    shadowColor: '#c0c0c0',
+    backgroundColor: 'white',
+    shadowColor: 'black',
+    elevation: 2,
   },
   label: {
-    color: 'gray',
-    marginBottom: 4,
-    marginLeft: 20,
-    marginTop: 10,
     fontSize: 12,
+    marginLeft: 5,
+    paddingTop: 10,
+    paddingLeft: 10,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginRight: 10,
   },
   input: {
     flex: 1,
     color: 'black',
-    paddingVertical: 4,
-    paddingHorizontal: 6,
-    borderRadius: 4,
     fontSize: 16,
     fontFamily: 'RobotoFlex-Regular',
-    marginLeft: 13,
-  },
-  inverse: {
-    flexDirection: 'row',
-    marginRight: 16,
+    marginLeft: 10,
   },
   errorLabel: {
-    marginTop: 0,
+    color: 'red',
+    marginLeft: 0,
+    paddingTop: 2,
+    paddingBottom: 10,
   },
 });

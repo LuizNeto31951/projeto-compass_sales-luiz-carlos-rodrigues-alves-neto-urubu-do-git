@@ -14,17 +14,27 @@ const Stack = createStackNavigator();
 
 function NotAuth(): JSX.Element {
   return (
-    <Stack.Navigator screenOptions={{headerTitle: "",}}>
-      <Stack.Screen name="LoginScreen" component={LoginScreen} />
-      <Stack.Screen options={({ navigation }) => ({headerLeft: () => <BackButton onPress={() => navigation.goBack()} />})}name="ForgotPassword" component={ForgotPassword} />
-      <Stack.Screen options={({ navigation }) => ({headerLeft: () => <BackButton onPress={() => navigation.goBack()} />})}name="SignUpScreen" component={SignUpScreen} />
+    <Stack.Navigator screenOptions={{headerTitle: ''}}>
+      <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+      <Stack.Screen
+        options={{headerLeft: () => null}}
+        name="LoginScreen"
+        component={LoginScreen}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({
+          headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
+        })}
+        name="ForgotPassword"
+        component={ForgotPassword}
+      />
     </Stack.Navigator>
   );
 }
 
 function Auth(): JSX.Element {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerTitle: ''}}>
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
     </Stack.Navigator>
   );

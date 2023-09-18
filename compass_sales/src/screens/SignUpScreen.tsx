@@ -5,6 +5,8 @@ import {signUp} from '../components/util/Firebase';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
 import {AuthContext} from '../context/authContext';
 import SocialButtons from '../components/Socials/SocialButtons';
+import {useNavigation} from '@react-navigation/native';
+import LoginScreen from './LoginScreen';
 
 function SignUpScreen(): JSX.Element {
   interface signUpProps {
@@ -14,13 +16,13 @@ function SignUpScreen(): JSX.Element {
   }
 
   const [loading, setLoading] = React.useState(false);
-  const ctx = React.useContext(AuthContext);
+  const navigation = useNavigation();
 
   async function signUpHandler({name, email, password}: signUpProps) {
     setLoading(true);
     try {
       const data = await signUp({name, email, password});
-      ctx.authLogin(data.token, data.id);
+      navigation.navigate('LoginScreen' as never);
     } catch (error) {
       Alert.alert('SignUp failed', 'Please try again later!');
     }
